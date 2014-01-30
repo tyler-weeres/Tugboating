@@ -1,37 +1,87 @@
 (function(){
 	var game;
 	var boat;
+	var barge;
 
-	function startGame(){
-		game = new Phaser.Game(800, 600, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
-		game.antialias = true;
-	}
-	function preload() {
-		 game.load.image("boat", "assets/boat.png");
+	// Classes
+	function Tug(){
+		var me = this;
+
+		Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY, "boat");
+		me.anchor.setTo(0.5, 0.5);
+		me.body.drag.setTo(500, 500);
+		me.body.collideWorldBounds = true;
+    	me.body.bounce.setTo(0.1, 0.1);
+
+    	game.add.existing(me);
 	}
 
-	function create() {
-		boat = game.add.sprite(100, 100, "boat");
-		boat.anchor.setTo(0.5, 0.5);
-		boat.body.drag.setTo(200, 200);
-	}
+	Tug.prototype = Object.create(Phaser.Sprite.prototype);
+	Tug.prototype.constructor = Tug;
 
-	function update() {
+	Tug.prototype.update = function(){
+		var me = this;
+
 		//  only move when you click
 	    if (game.input.mousePointer.isDown)
 	    {
-	        boat.rotation = game.physics.accelerateToPointer(boat, this.game.input.activePointer, 200, 400, 400 );
+	        me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 150, 150, 150 );
 
 	        //  if it's overlapping the mouse, don't move any more
-	        if (Phaser.Rectangle.contains(boat.body, game.input.x, game.input.y))
+	        if (Phaser.Rectangle.contains(me.body, game.input.x, game.input.y))
 	        {
-	            boat.body.acceleration.setTo(0, 0);
+	            me.body.acceleration.setTo(0, 0);
 	        }
 	    }
 	    else
 	    {
-	        boat.body.acceleration.setTo(0,0);
+	        me.body.acceleration.setTo(0,0);
 	    }
+	}
+
+	function Barge(){
+		var me = this;
+
+		Phaser.Sprite.call(me, game, game.world.centerX, 200, "barge");
+		me.body.collideWorldBounds = true;
+		me.body.drag.setTo(100, 100);
+		me.body.allowRotation = true;
+		me.anchor.setTo(0.5, 0.5);	
+    	// me.body.bounce.setTo(0.1, 0.1);
+
+		game.add.existing(me);
+	}
+
+	Barge.prototype = Object.create(Phaser.Sprite.prototype);
+	Barge.prototype.constructor = Barge;
+
+	Barge.prototype.update = function(){
+		var me = this;
+
+
+	}
+
+	function startGame(){
+		game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
+	}
+
+	function preload() {
+		 game.load.image("boat", "assets/boat.png");
+		 game.load.image("barge", "assets/barge.png");
+	}
+
+	function create() {
+		game.antialias = true;
+		game.stage.backgroundColor = "#1693A5";
+
+		boat = new Tug();
+		barge = new Barge();
+	}
+
+	function update() {
+		boat.update();
+
+		game.physics.collide(boat, barge);
 	}
 
 	startGame();
