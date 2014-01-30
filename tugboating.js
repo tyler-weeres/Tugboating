@@ -12,7 +12,6 @@
 
 	function create() {
 		boat = game.add.sprite(100, 100, "boat");
-		boat.scale = { x: 0.1, y: 0.1 };
 		boat.anchor.setTo(0.5, 0.5);
 		boat.body.drag.setTo(200, 200);
 	}
