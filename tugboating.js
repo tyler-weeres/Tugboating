@@ -2,6 +2,7 @@
 	var game;
 	var boat;
 	var barges;
+    var rails;
 	var waveEmitter;
 	var Tiles = [];
 	var direction =
@@ -69,7 +70,6 @@
 
 		game.add.existing(me);
 
-		debugger;
 		// var noCollision = false;
 		// while(!noCollision){
 		// 	noCollision = true;
@@ -99,13 +99,12 @@
 	function Rail(asset, x, y) {
         var me = this;
         Phaser.Sprite.call(me, game, x, y, asset);
+        me.body.immovable = true;
     }
 
     Rail.prototype = Object.create(Phaser.Sprite.prototype);
     Rail.prototype.constructor = Rail;
 
-
-    //CHRIS
     function CreateMap(railToken) {
         var prev = -2;
         for (var i = 0 ; i < railToken.length; i++) {
@@ -227,12 +226,15 @@
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
 		}
 
+        rails = game.add.group();
+
 		CreateMap("*RSLRLRSSLRLSSSSSSSSSSSS");
 
         for (var i = 0; i < Tiles.length ; i++) {
-            
             game.add.existing(Tiles[i].railLeft);
             game.add.existing(Tiles[i].railRight);
+            rails.add(Tiles[i].railLeft);
+            rails.add(Tiles[i].railRight);
         }
 
 		waveEmitter = game.add.emitter(0, 0, 5000);
@@ -257,6 +259,8 @@
 
 		game.physics.collide(boat, barges);
 		game.physics.collide(barges, barges);
+        game.physics.collide(barges, rails);
+        game.physics.collide(boat, rails);
 	}
 
 	startGame();
