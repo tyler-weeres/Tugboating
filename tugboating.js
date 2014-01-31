@@ -334,8 +334,7 @@
         game.physics.collide(barges, rails);
         game.physics.collide(boat, rails);
 
-
-        timerText.textContent = "Time: " + Math.floor(game.time.totalElapsedSeconds()) + "s";
+        timerText.textContent = "Time: " + Math.floor(game.time.totalElapsedSeconds());
 	}
 
 	startGame();
