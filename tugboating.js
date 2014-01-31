@@ -6,7 +6,7 @@
 	var waveEmitter;
 	var Tiles = [];
 	var tileSize = 128;
-    var sizeModifier = 4
+    var sizeModifier = 2
     var offSet = tileSize * sizeModifier
 
 	var direction =
@@ -151,12 +151,21 @@
                     break;
                 case "L":
                     if (direction.cur == "R") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY+offSet, Tiles[prev].lX+(2*offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
-                        direction.prev = "L";
-                        direction.cur = "S";
+
+                        if (railToken[i - 1] != "S") {
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2 * offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
+                            direction.prev = "L";
+                            direction.cur = "S";
+                        } else {
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2* offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
+                            direction.prev = "L";
+                            direction.cur = "S";
+                        }
                     } else {
                         if (direction.prev == "R") {
-
+                            Tiles.push(new MapPiece(Tiles[prev].lX +offSet, Tiles[prev].lY - 2*offSet, Tiles[prev].lX, Tiles[prev].lY - 2*offSet, "verticalLeft", "rightTop"));
+                            direction.prev = "S";
+                            direction.cur = "L";
                         } else {
                             Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalLeft", "rightTop"));
                             direction.prev = direction.cur;
@@ -164,11 +173,19 @@
                         }
                     }
                     break;
+                    //RSLRLSLSSR
+                    //SLRL
                 case "R":
                     if (direction.cur == "L") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX-(2*offSet), Tiles[prev].lY+offSet, Tiles[prev].lX-(2*offSet), Tiles[prev].lY, "rightTop", "verticalLeft"));
-                        direction.prev = "R";
-                        direction.cur = "S";
+                        if (railToken[i-1] != "S") {
+                            Tiles.push(new MapPiece(Tiles[prev].lX-(2*offSet), Tiles[prev].lY+offSet, Tiles[prev].lX-(2*offSet), Tiles[prev].lY, "rightTop", "verticalLeft"));
+                            direction.prev = "R";
+                            direction.cur = "S";
+                        } else {
+                            Tiles.push(new MapPiece(Tiles[prev].lX - (offSet), Tiles[prev].lY - offSet + offSet, Tiles[prev].lX - (offSet), Tiles[prev].lY-offSet, "rightTop", "verticalLeft"));
+                            direction.prev = "R";
+                            direction.cur = "S";
+                        }
                     } else {
                        if (direction.prev == "L") {
                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX, Tiles[prev].lY - (2*offSet), "verticalLeft", "rightTop"));
@@ -179,6 +196,7 @@
                             direction.prev = direction.cur;
                             direction.cur = "R";
                         }
+
                     }
                     break;
             }
@@ -201,6 +219,26 @@
 
 	function startGame(){
 		game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
+	}
+
+	function CreateMapToken() {
+	    height = game.world.height;
+	    width = game.world.height;
+	    cur_height = 0;
+	    cur_width = width / 2;
+	    cur_direction = "S";
+	    paths = ["S", "S", "S", "S", "S", "L", "L", "L", "R", "R", "R"];
+	    token = "*";
+	    for (var i = 0; i < 15 ; i++) {
+	        choice = Math.floor((Math.random() * (paths.length - 1)) + 1);
+	        if (paths[choice] != "S" && paths[choice] == token[token.length - 1]) {
+	            continue;
+	        } else {
+	            token = token.concat(paths[choice]);
+	        }  
+	    }
+	    alert(token);
+	    return token;   
 	}
 
 	function preload() {
@@ -228,8 +266,8 @@
 		}
 
         rails = game.add.group();
-
-		CreateMap("*RSLRLRSSLRLSSSSSSSSSSSS");
+        token = CreateMapToken();
+        CreateMap(token);
 
         for (var i = 0; i < Tiles.length ; i++) {
 
