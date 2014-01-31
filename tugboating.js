@@ -26,7 +26,6 @@
         me.body.drag.setTo(500, 500);
         me.body.collideWorldBounds = true;
         me.body.bounce.setTo(0.1, 0.1);
-        me.body.mass = 2;
 
         game.add.existing(me);
     }
