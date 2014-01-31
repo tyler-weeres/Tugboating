@@ -13,78 +13,17 @@
     function Rail(asset, x, y) {
         var me = this;
         Phaser.Sprite.call(me, game, x, y, asset);
-        //debugger;
-
     }
 
     Rail.prototype = Object.create(Phaser.Sprite.prototype);
     Rail.prototype.constructor = Rail;
 
+
+    //CHRIS
     function CreateMap(railToken) {
         var prev = -2;
         for (var i = 0 ; i < railToken.length; i++) {
             prev++;
-            //    switch (railToken[i]) {
-            //        case "*":
-            //            Tiles.push(new MapPiece(400, 550, 300, 550, "vertical", "vertical"));
-            //            direction.cur = "S"
-            //            break;
-            //        case "S":
-            //            if (direction.cur === "R") {
-            //                Tiles.push(new MapPiece(Tiles[prev ].rX+128, Tiles[prev].rY, Tiles[prev].lX + 128, Tiles[prev].lY+64, "right", "right"));
-            //                direction.prev = direction.cur;
-            //                direction.cur = "R"
-            //            } else if (direction.cur === "L") {
-            //                Tiles.push(new MapPiece(Tiles[prev].rX - 256, Tiles[prev].rY, Tiles[prev - 1].lX - 128, Tiles[prev - 1].lY, "left", "left"));
-            //                direction.prev = direction.cur;
-            //                direction.cur = "L"
-            //            } else {
-            //               // debugger;
-            //                if (direction.prev === "R") {
-            //                    Tiles.push(new MapPiece(Tiles[prev].rX, Tiles[prev].rY - 128, Tiles[prev].lX + 128, Tiles[prev].lY - 256, "vertical", "vertical"));
-            //                    direction.prev = direction.cur;
-            //                    direction.cur = "S"
-            //                } else if (direction.prev === "L") {
-            //                    Tiles.push(new MapPiece(Tiles[prev].rX + 128, Tiles[prev].rY-256, Tiles[prev].lX - 128, Tiles[prev].lY - 128, "vertical", "vertical"));
-            //                    direction.prev = direction.cur;
-            //                    direction.cur = "S"
-            //                } else {
-            //                    Tiles.push(new MapPiece(Tiles[prev].rX, Tiles[prev].rY - 128, Tiles[prev].lX , Tiles[prev].lY -128, "vertical", "vertical"));
-            //                    direction.prev = direction.cur;
-            //                    direction.cur = "S"
-            //                }
-            //            }
-            //            break;
-            //        case "L":
-            //           // debugger;
-            //            if (direction.cur === "R") {
-            //                Tiles.push(new MapPiece(Tiles[prev - 1].rX, Tiles[prev - 1].rY, Tiles[prev - 1].rX + 128, Tiles[prev - 1].rY - 128, "left", "vertical"));
-            //                direction.prev = "L";
-
-            //                direction.cur = "S"
-            //            } else {
-            //                Tiles.push(new MapPiece(Tiles[prev].rX, Tiles[prev].rY - 128, Tiles[prev].rX - 128, Tiles[prev].rY - 128, "vertical", "left"));
-            //                direction.prev = direction.cur;
-            //                direction.cur = "L"
-            //            }
-            //            break;
-            //        case "R":
-
-            //            if (direction.cur === "L") {
-            //                Tiles.push(new MapPiece(Tiles[prev - 1].lX - 128, Tiles[prev - 1].lY - 128, Tiles[prev - 1].lX - 128, Tiles[prev - 1].lY, "vertical", "right"));
-
-            //                direction.prev = "R";
-            //                direction.cur = "S"
-            //            } else {
-            //                Tiles.push(new MapPiece(Tiles[prev].lX-128, Tiles[prev].lY - 128, Tiles[prev].lX-128, Tiles[prev].lY - 128, "right", "vertical"));
-            //                direction.prev = direction.cur;
-            //                direction.cur = "R"
-            //            }
-
-            //            break;
-            //    }
-            //}
-
             switch (railToken[i]) {
                 case "*":
                     Tiles.push(new MapPiece(500, 550, 628, 550, "vertical", "vertical"));
@@ -123,9 +62,14 @@
                         direction.prev = "L";
                         direction.cur = "S";
                     } else {
-                        Tiles.push(new MapPiece(Tiles[prev].lX + 128, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
-                        direction.prev = direction.cur;
-                        direction.cur = "L";
+                        if (direction.prev == "R") {
+
+                        } else {
+                            Tiles.push(new MapPiece(Tiles[prev].lX + 128, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
+                            direction.prev = direction.cur;
+                            direction.cur = "L";
+
+                        }
                     }
                     break;
                 case "R":
@@ -134,10 +78,15 @@
                         direction.prev = "R";
                         direction.cur = "S";
                     } else {
-
-                        Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
-                        direction.prev = direction.cur;
-                        direction.cur = "R";
+                       if (direction.prev == "L") {
+                           Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 256, Tiles[prev].lX, Tiles[prev].lY - 256, "vertical", "right"));
+                           direction.prev = "S";
+                           direction.cur = "R";
+                        } else {
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
+                            direction.prev = direction.cur;
+                            direction.cur = "R";
+                        }
                     }
                     break;
             }
@@ -152,8 +101,6 @@
         me.rY = rY;
         me.lX = lX;
         me.lY = lY;
-
-
         //check direction, rotate if need be
         if (rotation === "LEFT") {
             //rotate piece left
@@ -167,7 +114,6 @@
             //  debugger;
             me.railRight = new Rail(rAsset, rX, rY);
             me.railLeft = new Rail(lAsset, lX, lY);
-
         }
 
     }
@@ -178,13 +124,11 @@
     // Classes
     function Tug() {
         var me = this;
-
         Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY, "boat");
         me.anchor.setTo(0.5, 0.5);
         me.body.drag.setTo(500, 500);
         me.body.collideWorldBounds = true;
         me.body.bounce.setTo(0.1, 0.1);
-
         game.add.existing(me);
 
     }
@@ -252,7 +196,7 @@
 
         boat = new Tug();
         barge = new Barge();
-        CreateMap("*RLSSS");
+        CreateMap("*RSLRLRSSLRLS");
 
         for (var i = 0; i < Tiles.length ; i++) {
             
