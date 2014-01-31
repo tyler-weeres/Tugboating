@@ -325,11 +325,8 @@
         game.physics.collide(barges, rails);
         game.physics.collide(boat, rails);
 
-<<<<<<< HEAD
 
-=======
         timerText.textContent = "Time: " + Math.floor(game.time.totalElapsedSeconds()) + "s";
->>>>>>> origin/master
 	}
 
 	startGame();
