@@ -27,6 +27,7 @@
         me.body.drag.setTo(500, 500);
         me.body.collideWorldBounds = true;
         me.body.bounce.setTo(0.1, 0.1);
+        me.speed = game.net.getQueryString("speed") != {} ? Number(game.net.getQueryString("speed")) : 300;
 
         game.add.existing(me);
     }
@@ -40,12 +41,12 @@
         //  only move when you click
         if (game.input.activePointer.isDown)
         {
-            me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
+            me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, me.speed, me.speed, me.speed );
             waveEmitter.x = me.x;
             waveEmitter.y = me.y;
             // waveEmitter.angle
             if(!waveEmitter.on){
-                waveEmitter.start(false, 500, 2, 0);
+                waveEmitter.start(false, 500, 1, 0);
             }
 
             //  if it's overlapping the mouse, don't move any more
