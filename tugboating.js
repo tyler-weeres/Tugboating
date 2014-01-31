@@ -26,7 +26,6 @@
         me.body.drag.setTo(500, 500);
         me.body.collideWorldBounds = true;
         me.body.bounce.setTo(0.1, 0.1);
-        me.body.mass = 2;
 
         game.add.existing(me);
     }
@@ -38,7 +37,7 @@
         var me = this;
 
         //  only move when you click
-        if (game.input.mousePointer.isDown)
+        if (game.input.activePointer.isDown)
         {
             me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
             waveEmitter.x = me.x;
@@ -255,7 +254,7 @@
 
 	function preload() {
 		game.load.image("boat", "assets/tug_boat.png");
-        game.load.image("barge", "assets/barge.png");
+        game.load.image("barge", "assets/OilBarge.png");
         game.load.image("verticalLeft", "assets/map/vertical_left.png");
         game.load.image("verticalRight", "assets/map/vertical_right.png");
         game.load.image("leftBottom", "assets/map/horizontal_bottom.png");
