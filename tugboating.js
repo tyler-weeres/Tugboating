@@ -38,7 +38,7 @@
         var me = this;
 
         //  only move when you click
-        if (game.input.mousePointer.isDown)
+        if (game.input.activePointer.isDown)
         {
             me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
             waveEmitter.x = me.x;
