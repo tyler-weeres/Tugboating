@@ -2,7 +2,6 @@
     var game;
     var cur_direction = "S";
 	var boat;
-<<<<<<< HEAD
 	var LENGTH_OFFSET = 256;
 	var HALF_OFFSET = 128;
 	var landTypes = {
@@ -126,7 +125,7 @@
 		// game.add.existing(map.vertRail);
 		// game.add.existing(map.horiRail);
 
-=======
+
 	var barge;
 
 	// Classes
@@ -140,7 +139,7 @@
     	me.body.bounce.setTo(0.1, 0.1);
 
     	game.add.existing(me);
->>>>>>> origin/master
+
 	}
 
 	Tug.prototype = Object.create(Phaser.Sprite.prototype);
