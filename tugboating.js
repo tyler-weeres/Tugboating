@@ -6,7 +6,7 @@
     var waveEmitter;
     var Tiles = [];
     var tileSize = 128;
-    var sizeModifier = 2
+    var sizeModifier = 6;
     var offSet = tileSize * sizeModifier
     var timerText;
 
@@ -66,7 +66,7 @@
     function Barge(){
         var me = this;
 
-        Phaser.Sprite.call(me, game, game.world.centerX, game.world.height - 300, "barge");
+        Phaser.Sprite.call(me, game, boat.x, game.world.height - 300, "barge");
 
         me.body.collideWorldBounds = true;
         me.body.drag.setTo(100, 100);
@@ -272,7 +272,7 @@
 	function create() {
 		game.antialias = true;
 		game.stage.backgroundColor = "#1693A5";
-		game.world.setBounds(0, 0, 15000, 15000);
+		game.world.setBounds(0, 0, 20000, 20000);
 
 		for(var i=0; i<100; i++){
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
