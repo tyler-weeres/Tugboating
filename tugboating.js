@@ -42,12 +42,12 @@
 	function Barge(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.centerX, 200, "barge");
+		Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY - 400, "barge");
 		me.body.collideWorldBounds = true;
 		me.body.drag.setTo(100, 100);
+		me.body.angularDrag = 30;
 		me.body.allowRotation = true;
-		me.anchor.setTo(0.5, 0.5);	
-    	// me.body.bounce.setTo(0.1, 0.1);
+		me.anchor.setTo(0.5, 0.5);
 
 		game.add.existing(me);
 	}
@@ -58,7 +58,9 @@
 	Barge.prototype.update = function(){
 		var me = this;
 
-
+		if(me.body.touching.none){
+			me.body.angularAcceleration = 0;
+		}
 	}
 
 	function startGame(){
@@ -68,18 +70,27 @@
 	function preload() {
 		 game.load.image("boat", "assets/boat.png");
 		 game.load.image("barge", "assets/barge.png");
+		 game.load.image("wave", "assets/wave.png");
 	}
 
 	function create() {
 		game.antialias = true;
 		game.stage.backgroundColor = "#1693A5";
+		game.world.setBounds(0, 0, 3000, 3000);
+
+		for(var i=0; i<100; i++){
+			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
+		}
 
 		boat = new Tug();
 		barge = new Barge();
+
+		game.camera.follow(boat, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
 	}
 
 	function update() {
 		boat.update();
+		barge.update();
 
 		game.physics.collide(boat, barge);
 	}
