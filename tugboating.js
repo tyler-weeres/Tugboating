@@ -6,8 +6,9 @@
 	var waveEmitter;
 	var Tiles = [];
 	var tileSize = 128;
-    var sizeModifier = 4
-    var offSet = tileSize * sizeModifier
+    var sizeModifier = 5;
+    var offSet = tileSize * sizeModifier;
+    var timerText;
 
 	var direction =
     {
@@ -19,7 +20,7 @@
 	function Tug(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY, "boat");
+		Phaser.Sprite.call(me, game, game.world.centerX, game.world.height, "boat");
 		me.anchor.setTo(0.5, 0.5);
 		me.body.drag.setTo(500, 500);
 		me.body.collideWorldBounds = true;
@@ -64,7 +65,7 @@
 	function Barge(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.randomX, game.world.randomY, "barge");
+		Phaser.Sprite.call(me, game, game.world.centerX, game.world.height - 300, "barge");
 
 		me.body.collideWorldBounds = true;
 		me.body.drag.setTo(100, 100);
@@ -118,7 +119,7 @@
             prev++;
             switch (railToken[i]) {
                 case "*":
-                    Tiles.push(new MapPiece(500, game.world.height, 500 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
+                    Tiles.push(new MapPiece(game.world.centerX - 500, game.world.height, 500 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
                                       
                     direction.cur = "S"
                     break;
@@ -229,7 +230,7 @@
 
         rails = game.add.group();
 
-		CreateMap("*RSLRLRSSLRLSSSSSSSSSSSS");
+		CreateMap("*RSLSSLSRSS");
 
         for (var i = 0; i < Tiles.length ; i++) {
 
@@ -267,11 +268,13 @@
 		boat = new Tug();
 		barges = game.add.group();
 
-		for(i=0; i<15; i++){
+		for(i=0; i<1; i++){
 			barges.add(new Barge());
 		}
 
 		game.camera.follow(boat, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+
+        timerText = document.getElementById("timerText");
 	}
 
 	function update() {
@@ -282,6 +285,8 @@
 		game.physics.collide(barges, barges);
         game.physics.collide(barges, rails);
         game.physics.collide(boat, rails);
+
+        timerText.textContent = "Time: " + Math.floor(game.time.totalElapsedSeconds()) + "s";
 	}
 
 	startGame();
