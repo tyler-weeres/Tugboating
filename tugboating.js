@@ -1,109 +1,109 @@
 (function(){
-	var game;
-	var boat;
-	var barges;
+    var game;
+    var boat;
+    var barges;
     var rails;
-	var waveEmitter;
-	var Tiles = [];
-	var tileSize = 128;
+    var waveEmitter;
+    var Tiles = [];
+    var tileSize = 128;
     var sizeModifier = 2
     var offSet = tileSize * sizeModifier
     var timerText;
 
-	var direction =
+    var direction =
     {
         prev: "S",
         cur: "S"
     };
 
-	// Classes
-	function Tug(){
-		var me = this;
+    // Classes
+    function Tug(){
+        var me = this;
 
 
-		Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height, "boat");
-		me.anchor.setTo(0.5, 0.5);
-		me.body.drag.setTo(500, 500);
-		me.body.collideWorldBounds = true;
-    	me.body.bounce.setTo(0.1, 0.1);
-    	me.body.mass = 2;
+        Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height, "boat");
+        me.anchor.setTo(0.5, 0.5);
+        me.body.drag.setTo(500, 500);
+        me.body.collideWorldBounds = true;
+        me.body.bounce.setTo(0.1, 0.1);
+        me.body.mass = 2;
 
-    	game.add.existing(me);
-	}
+        game.add.existing(me);
+    }
 
-	Tug.prototype = Object.create(Phaser.Sprite.prototype);
-	Tug.prototype.constructor = Tug;
+    Tug.prototype = Object.create(Phaser.Sprite.prototype);
+    Tug.prototype.constructor = Tug;
 
-	Tug.prototype.update = function(){
-		var me = this;
+    Tug.prototype.update = function(){
+        var me = this;
 
-		//  only move when you click
-	    if (game.input.mousePointer.isDown)
-	    {
-	        me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
-	        waveEmitter.x = me.x;
-	        waveEmitter.y = me.y;
-	        // waveEmitter.angle
-	        if(!waveEmitter.on){
-	        	waveEmitter.start(false, 500, 2, 0);
-	        }
+        //  only move when you click
+        if (game.input.mousePointer.isDown)
+        {
+            me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
+            waveEmitter.x = me.x;
+            waveEmitter.y = me.y;
+            // waveEmitter.angle
+            if(!waveEmitter.on){
+                waveEmitter.start(false, 500, 2, 0);
+            }
 
-	        //  if it's overlapping the mouse, don't move any more
-	        if (Phaser.Rectangle.contains(me.body, game.input.x, game.input.y))
-	        {
-	            me.body.acceleration.setTo(0, 0);
-	        }
-	    }
-	    else
-	    {
-	        me.body.acceleration.setTo(0,0);
-	        if(waveEmitter.on){
-	        	waveEmitter.on = false;
-	        }
-	    }
-	}
+            //  if it's overlapping the mouse, don't move any more
+            if (Phaser.Rectangle.contains(me.body, game.input.x, game.input.y))
+            {
+                me.body.acceleration.setTo(0, 0);
+            }
+        }
+        else
+        {
+            me.body.acceleration.setTo(0,0);
+            if(waveEmitter.on){
+                waveEmitter.on = false;
+            }
+        }
+    }
 
-	function Barge(){
-		var me = this;
+    function Barge(){
+        var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.centerX, game.world.height - 300, "barge");
+        Phaser.Sprite.call(me, game, game.world.centerX, game.world.height - 300, "barge");
 
-		me.body.collideWorldBounds = true;
-		me.body.drag.setTo(100, 100);
-		me.body.angularDrag = 30;
-		me.body.allowRotation = true;
-		me.anchor.setTo(0.5, 0.5);
+        me.body.collideWorldBounds = true;
+        me.body.drag.setTo(100, 100);
+        me.body.angularDrag = 30;
+        me.body.allowRotation = true;
+        me.anchor.setTo(0.5, 0.5);
 
-		game.add.existing(me);
+        game.add.existing(me);
 
 
-		// var noCollision = false;
-		// while(!noCollision){
-		// 	noCollision = true;
-		// 	barges.forEach(function(barge){
-		// 		if(me.bounds.containsRect(barge.bounds)){
-		// 			noCollision = false;
-		// 		}
-		// 	});
-		// 	if(!noCollision){
-		// 		me.x = game.world.randomX;
-		// 		me.y = game.world.randomY;
-		// 	}
-		// }
-	}
+        // var noCollision = false;
+        // while(!noCollision){
+        // 	noCollision = true;
+        // 	barges.forEach(function(barge){
+        // 		if(me.bounds.containsRect(barge.bounds)){
+        // 			noCollision = false;
+        // 		}
+        // 	});
+        // 	if(!noCollision){
+        // 		me.x = game.world.randomX;
+        // 		me.y = game.world.randomY;
+        // 	}
+        // }
+    }
 
-	Barge.prototype = Object.create(Phaser.Sprite.prototype);
-	Barge.prototype.constructor = Barge;
+    Barge.prototype = Object.create(Phaser.Sprite.prototype);
+    Barge.prototype.constructor = Barge;
 
-	Barge.prototype.update = function(){
-		var me = this;
+    Barge.prototype.update = function(){
+        var me = this;
 
-		if(me.body.touching.none){
-			me.body.angularAcceleration = 0;
-		}
-	}
+        if(me.body.touching.none){
+            me.body.angularAcceleration = 0;
+        }
+    }
 
-	function Rail(asset, x, y) {
+    function Rail(asset, x, y) {
         var me = this;
         Phaser.Sprite.call(me, game, x, y, asset);
         me.asset = asset;
@@ -176,8 +176,6 @@
                         }
                     }
                     break;
-                    //RSLRLSLSSR
-                    //SLRL
                 case "R":
                     if (direction.cur == "L") {
                         if (railToken[i-1] != "S") {
@@ -190,10 +188,10 @@
                             direction.cur = "S";
                         }
                     } else {
-                       if (direction.prev == "L") {
-                           Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX, Tiles[prev].lY - (2*offSet), "verticalLeft", "rightTop"));
-                           direction.prev = "S";
-                           direction.cur = "R";
+                        if (direction.prev == "L") {
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX, Tiles[prev].lY - (2*offSet), "verticalLeft", "rightTop"));
+                            direction.prev = "S";
+                            direction.cur = "R";
                         } else {
                             Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalLeft", "rightTop"));
                             direction.prev = direction.cur;
@@ -220,27 +218,39 @@
 
     }
 
-	function startGame(){
-		game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
-	}
+    function startGame(){
+        game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
+    }
 
-	function createMapToken() {
-	    height = game.world.height;
-	    width = game.world.height;
-	    cur_height = 0;
-	    cur_width = width / 2;
-	    cur_direction = "S";
-	    paths = ["S", "S", "S", "S", "S", "L", "L", "L", "R", "R", "R"];
-	    token = "*";
-	    for (var i = 0; i < 50 ; i++) {
-	        choice = Math.floor((Math.random() * (paths.length - 1)) + 1);
-	        if (paths[choice] != "S" && paths[choice] == token[token.length - 1]) {
-	            continue;
-	        } else {
-	            token = token.concat(paths[choice]);
-	        }  
-	    }
-	    alert(token);
+    function createMapToken() {
+        height = game.world.height;
+        width = game.world.height;
+        cur_height = 0;
+        cur_width = width / 2;
+        cur_direction = "S";
+        var changed = true;
+        paths = ["S", "S", "S", "S", "S", "L", "L", "L", "R", "R", "R"];
+        token = "*";
+        for (var i = 0; i < 50 ; i++) {
+            choice = Math.floor((Math.random() * (paths.length - 1)) + 1);
+
+            if (paths[choice] != "S") {
+                if (paths[choice] == token[token.length - 1] || paths[choice] == cur_direction ) {
+                    continue;
+                } else {
+                    token = token.concat(paths[choice]);
+                    if (cur_direction == "S") {
+                        cur_direction = paths[choice];
+                    } else {
+                        cur_direction = "S";
+                    }
+                    
+                }
+            } else {
+                token = token.concat(paths[choice]);
+            }
+        }   
+	    
 	    return token;   
 	}
 
@@ -267,7 +277,6 @@
 		for(var i=0; i<100; i++){
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
 		}
-
         rails = game.add.group();
         token = createMapToken();
         CreateMap(token);
