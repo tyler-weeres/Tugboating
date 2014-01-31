@@ -112,7 +112,7 @@
             prev++;
             switch (railToken[i]) {
                 case "*":
-                    Tiles.push(new MapPiece(500, 550, 628, 550, "vertical", "vertical"));
+                    Tiles.push(new MapPiece(500, game.world.height, 628, game.world.height, "vertical", "vertical"));
                     direction.cur = "S"
                     break;
                 case "S":
@@ -227,7 +227,7 @@
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
 		}
 
-		CreateMap("*RSLRLRSSLRLS");
+		CreateMap("*RSLRLRSSLRLSSSSSSSSSSSS");
 
         for (var i = 0; i < Tiles.length ; i++) {
             
