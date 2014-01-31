@@ -22,12 +22,12 @@
         var me = this;
 
 
-        Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height, "boat");
+        Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height - 30, "boat");
         me.anchor.setTo(0.5, 0.5);
         me.body.drag.setTo(500, 500);
         me.body.collideWorldBounds = true;
         me.body.bounce.setTo(0.1, 0.1);
-        me.speed = game.net.getQueryString("speed") != {} ? Number(game.net.getQueryString("speed")) : 300;
+        me.speed = typeof game.net.getQueryString("speed") == "string" ? Number(game.net.getQueryString("speed")) : 300;
 
         game.add.existing(me);
     }
