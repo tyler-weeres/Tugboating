@@ -5,6 +5,10 @@
     var rails;
 	var waveEmitter;
 	var Tiles = [];
+	var tileSize = 128;
+    var sizeModifier = 4
+    var offSet = tileSize * sizeModifier
+
 	var direction =
     {
         prev: "S",
@@ -70,6 +74,7 @@
 
 		game.add.existing(me);
 
+
 		// var noCollision = false;
 		// while(!noCollision){
 		// 	noCollision = true;
@@ -99,6 +104,7 @@
 	function Rail(asset, x, y) {
         var me = this;
         Phaser.Sprite.call(me, game, x, y, asset);
+        me.asset = asset;
         me.body.immovable = true;
     }
 
@@ -107,35 +113,37 @@
 
     function CreateMap(railToken) {
         var prev = -2;
+
         for (var i = 0 ; i < railToken.length; i++) {
             prev++;
             switch (railToken[i]) {
                 case "*":
-                    Tiles.push(new MapPiece(500, game.world.height, 628, game.world.height, "vertical", "vertical"));
+                    Tiles.push(new MapPiece(500, game.world.height, 500 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
+                                      
                     direction.cur = "S"
                     break;
                 case "S":
                     if (direction.cur == "R") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX+128, Tiles[prev].lY , Tiles[prev].lX + 128, Tiles[prev].lY + 128, "right", "right"));
+                        Tiles.push(new MapPiece(Tiles[prev].lX+offSet, Tiles[prev].lY , Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, "rightTop", "rightTop"));
                         direction.prev = direction.cur;
                         direction.cur = "R";
                     } else if (direction.cur == "L") {
-                        Tiles.push(new MapPiece(Tiles[prev].rX - 128, Tiles[prev].rY+128, Tiles[prev].rX - 128, Tiles[prev].rY, "left", "left"));
+                        Tiles.push(new MapPiece(Tiles[prev].rX - offSet, Tiles[prev].rY+offSet, Tiles[prev].rX - offSet, Tiles[prev].rY, "leftTop", "leftTop"));
                         direction.prev = direction.cur;
                         direction.cur = "L";
                     } else {
                         if (direction.prev == "R") {
 
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 256, Tiles[prev].lX + 128, Tiles[prev].lY - 256, "vertical", "vertical"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX + offSet, Tiles[prev].lY - (2*offSet), "verticalLeft", "verticalLeft"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
 
                         } else if (direction.prev == "L") {
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 256, Tiles[prev].lX+128, Tiles[prev].lY-256, "vertical", "vertical"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX+offSet, Tiles[prev].lY-(2*offSet), "verticalLeft", "verticalLeft"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 128, Tiles[prev].lX+128, Tiles[prev].lY-128, "vertical", "vertical"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - offSet, Tiles[prev].lX+offSet, Tiles[prev].lY-offSet, "verticalLeft", "verticalLeft"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
                         }
@@ -143,32 +151,31 @@
                     break;
                 case "L":
                     if (direction.cur == "R") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX + 128, Tiles[prev].lY+128, Tiles[prev].lX+256, Tiles[prev].lY, "left", "vertical"));
+                        Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY+offSet, Tiles[prev].lX+(2*offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
                         direction.prev = "L";
                         direction.cur = "S";
                     } else {
                         if (direction.prev == "R") {
 
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX + 128, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalLeft", "rightTop"));
                             direction.prev = direction.cur;
                             direction.cur = "L";
-
                         }
                     }
                     break;
                 case "R":
                     if (direction.cur == "L") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX-256, Tiles[prev].lY+128, Tiles[prev].lX-256, Tiles[prev].lY, "right", "vertical"));
+                        Tiles.push(new MapPiece(Tiles[prev].lX-(2*offSet), Tiles[prev].lY+offSet, Tiles[prev].lX-(2*offSet), Tiles[prev].lY, "rightTop", "verticalLeft"));
                         direction.prev = "R";
                         direction.cur = "S";
                     } else {
                        if (direction.prev == "L") {
-                           Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 256, Tiles[prev].lX, Tiles[prev].lY - 256, "vertical", "right"));
+                           Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX, Tiles[prev].lY - (2*offSet), "verticalLeft", "rightTop"));
                            direction.prev = "S";
                            direction.cur = "R";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - 128, Tiles[prev].lX, Tiles[prev].lY - 128, "vertical", "right"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalLeft", "rightTop"));
                             direction.prev = direction.cur;
                             direction.cur = "R";
                         }
@@ -186,20 +193,9 @@
         me.rY = rY;
         me.lX = lX;
         me.lY = lY;
-        //check direction, rotate if need be
-        if (rotation === "LEFT") {
-            //rotate piece left
-            me.railLeft = new Rail(lAsset, lX, lY);
-            me.railRight = null;
-        } else if (rotation === "RIGHT") {
-            //rotate piece right
-            me.railLeft = null;
-            me.railRight = new Rail(rAsset, rX, rX);
-        } else {//striaght rotation
-            //  debugger;
-            me.railRight = new Rail(rAsset, rX, rY);
-            me.railLeft = new Rail(lAsset, lX, lY);
-        }
+        me.railRight = new Rail(rAsset, rX, rY);
+        me.railLeft = new Rail(lAsset, lX, lY);
+        
 
     }
 
@@ -210,9 +206,14 @@
 	function preload() {
 		game.load.image("boat", "assets/tug_boat.png");
         game.load.image("barge", "assets/barge.png");
-        game.load.image("vertical", "assets/map/vertical.png");
-        game.load.image("left", "assets/map/horizontal.png");
-        game.load.image("right", "assets/map/horizontal.png");
+        game.load.image("verticalLeft", "assets/map/vertical_left.png");
+        game.load.image("verticalRight", "assets/map/vertical_right.png");
+        game.load.image("leftBottom", "assets/map/horizontal_bottom.png");
+        game.load.image("leftTop", "assets/map/horizontal_top.png");
+        game.load.image("rightBottom", "assets/map/horizontal_bottom.png");
+        game.load.image("rightTop", "assets/map/horizontal_top.png");
+
+
 		game.load.image("wave", "assets/wave.png");
 		game.load.image("wake", "assets/wake.png");
 	}
@@ -231,10 +232,30 @@
 		CreateMap("*RSLRLRSSLRLSSSSSSSSSSSS");
 
         for (var i = 0; i < Tiles.length ; i++) {
+
+
+            if (Tiles[i].railLeft.asset.indexOf("right") != -1 || Tiles[i].railLeft.asset.indexOf("left") != -1 ) {
+                Tiles[i].railLeft.scale.x = sizeModifier;
+            }                
+            else {
+                Tiles[i].railLeft.scale.y = sizeModifier;
+            }
+
+            if (Tiles[i].railRight.asset.indexOf("right") != -1 || Tiles[i].railRight.asset.indexOf("left") != -1) {
+                Tiles[i].railRight.scale.x = sizeModifier;
+            }
+            else {
+                Tiles[i].railRight.scale.y = sizeModifier;
+            }
+
+
+
             game.add.existing(Tiles[i].railLeft);
             game.add.existing(Tiles[i].railRight);
+
             rails.add(Tiles[i].railLeft);
             rails.add(Tiles[i].railRight);
+
         }
 
 		waveEmitter = game.add.emitter(0, 0, 5000);
