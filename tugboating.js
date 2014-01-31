@@ -8,6 +8,7 @@
 	var tileSize = 128;
     var sizeModifier = 2
     var offSet = tileSize * sizeModifier
+    var timerText;
 
 	var direction =
     {
@@ -18,6 +19,7 @@
 	// Classes
 	function Tug(){
 		var me = this;
+
 
 		Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height, "boat");
 		me.anchor.setTo(0.5, 0.5);
@@ -64,7 +66,7 @@
 	function Barge(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.randomX, game.world.randomY, "barge");
+		Phaser.Sprite.call(me, game, game.world.centerX, game.world.height - 300, "barge");
 
 		me.body.collideWorldBounds = true;
 		me.body.drag.setTo(100, 100);
@@ -118,6 +120,7 @@
             prev++;
             switch (railToken[i]) {
                 case "*":
+
                     Tiles.push(new MapPiece(game.world.width/2, game.world.height, game.world.width/2 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
                                       
                     direction.cur = "S"
@@ -221,7 +224,7 @@
 		game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
 	}
 
-	function CreateMapToken() {
+	function createMapToken() {
 	    height = game.world.height;
 	    width = game.world.height;
 	    cur_height = 0;
@@ -266,7 +269,7 @@
 		}
 
         rails = game.add.group();
-        token = CreateMapToken();
+        token = createMapToken();
         CreateMap(token);
 
         for (var i = 0; i < Tiles.length ; i++) {
@@ -305,10 +308,12 @@
 		boat = new Tug();
 		barges = game.add.group();
 
-		for(i=0; i<15; i++){
+		for(i=0; i<1; i++){
 			barges.add(new Barge());
 		}
 		game.camera.follow(boat, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+
+        timerText = document.getElementById("timerText");
 	}
 
 	function update() {
@@ -320,7 +325,11 @@
         game.physics.collide(barges, rails);
         game.physics.collide(boat, rails);
 
+<<<<<<< HEAD
 
+=======
+        timerText.textContent = "Time: " + Math.floor(game.time.totalElapsedSeconds()) + "s";
+>>>>>>> origin/master
 	}
 
 	startGame();
