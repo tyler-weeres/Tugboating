@@ -19,7 +19,7 @@
 	function Tug(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY, "boat");
+		Phaser.Sprite.call(me, game, game.world.width/2 + (offSet/2), game.world.height, "boat");
 		me.anchor.setTo(0.5, 0.5);
 		me.body.drag.setTo(500, 500);
 		me.body.collideWorldBounds = true;
@@ -118,7 +118,7 @@
             prev++;
             switch (railToken[i]) {
                 case "*":
-                    Tiles.push(new MapPiece(500, game.world.height, 500 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
+                    Tiles.push(new MapPiece(game.world.width/2, game.world.height, game.world.width/2 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
                                       
                     direction.cur = "S"
                     break;
@@ -229,7 +229,7 @@
 	    cur_direction = "S";
 	    paths = ["S", "S", "S", "S", "S", "L", "L", "L", "R", "R", "R"];
 	    token = "*";
-	    for (var i = 0; i < 15 ; i++) {
+	    for (var i = 0; i < 50 ; i++) {
 	        choice = Math.floor((Math.random() * (paths.length - 1)) + 1);
 	        if (paths[choice] != "S" && paths[choice] == token[token.length - 1]) {
 	            continue;
@@ -259,7 +259,7 @@
 	function create() {
 		game.antialias = true;
 		game.stage.backgroundColor = "#1693A5";
-		game.world.setBounds(0, 0, 3000, 3000);
+		game.world.setBounds(0, 0, 15000, 15000);
 
 		for(var i=0; i<100; i++){
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
@@ -308,7 +308,6 @@
 		for(i=0; i<15; i++){
 			barges.add(new Barge());
 		}
-
 		game.camera.follow(boat, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
 	}
 
@@ -320,6 +319,8 @@
 		game.physics.collide(barges, barges);
         game.physics.collide(barges, rails);
         game.physics.collide(boat, rails);
+
+
 	}
 
 	startGame();
