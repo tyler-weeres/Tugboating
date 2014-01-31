@@ -1,7 +1,8 @@
 (function(){
 	var game;
 	var boat;
-	var barge;
+	var barges;
+	var waveEmitter;
 
 	// Classes
 	function Tug(){
@@ -12,6 +13,7 @@
 		me.body.drag.setTo(500, 500);
 		me.body.collideWorldBounds = true;
     	me.body.bounce.setTo(0.1, 0.1);
+    	me.body.mass = 2;
 
     	game.add.existing(me);
 	}
@@ -25,7 +27,13 @@
 		//  only move when you click
 	    if (game.input.mousePointer.isDown)
 	    {
-	        me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 150, 150, 150 );
+	        me.rotation = game.physics.accelerateToPointer(me, this.game.input.activePointer, 300, 300, 300 );
+	        waveEmitter.x = me.x;
+	        waveEmitter.y = me.y;
+	        // waveEmitter.angle
+	        if(!waveEmitter.on){
+	        	waveEmitter.start(false, 500, 2, 0);
+	        }
 
 	        //  if it's overlapping the mouse, don't move any more
 	        if (Phaser.Rectangle.contains(me.body, game.input.x, game.input.y))
@@ -36,13 +44,16 @@
 	    else
 	    {
 	        me.body.acceleration.setTo(0,0);
+	        if(waveEmitter.on){
+	        	waveEmitter.on = false;
+	        }
 	    }
 	}
 
 	function Barge(){
 		var me = this;
 
-		Phaser.Sprite.call(me, game, game.world.centerX, game.world.centerY - 400, "barge");
+		Phaser.Sprite.call(me, game, game.world.randomX, game.world.randomY, "barge");
 		me.body.collideWorldBounds = true;
 		me.body.drag.setTo(100, 100);
 		me.body.angularDrag = 30;
@@ -71,6 +82,7 @@
 		 game.load.image("boat", "assets/boat.png");
 		 game.load.image("barge", "assets/barge.png");
 		 game.load.image("wave", "assets/wave.png");
+		 game.load.image("wake", "assets/wake.png");
 	}
 
 	function create() {
@@ -82,17 +94,28 @@
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
 		}
 
+		waveEmitter = game.add.emitter(0, 0, 5000);
+	    waveEmitter.makeParticles("wake");
+	    waveEmitter.gravity = 0;
+	    waveEmitter.minParticleScale = 0.75;
+	    waveEmitter.maxParticleScale = 2;
+
 		boat = new Tug();
-		barge = new Barge();
+		barges = game.add.group();
+
+		for(i=0; i<15; i++){
+			barges.add(new Barge());
+		}
 
 		game.camera.follow(boat, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
 	}
 
 	function update() {
 		boat.update();
-		barge.update();
+		barges.callAll("update");
 
-		game.physics.collide(boat, barge);
+		game.physics.collide(boat, barges);
+		game.physics.collide(barges, barges);
 	}
 
 	startGame();
