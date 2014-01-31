@@ -54,6 +54,7 @@
 		var me = this;
 
 		Phaser.Sprite.call(me, game, game.world.randomX, game.world.randomY, "barge");
+
 		me.body.collideWorldBounds = true;
 		me.body.drag.setTo(100, 100);
 		me.body.angularDrag = 30;
@@ -61,6 +62,21 @@
 		me.anchor.setTo(0.5, 0.5);
 
 		game.add.existing(me);
+
+		debugger;
+		// var noCollision = false;
+		// while(!noCollision){
+		// 	noCollision = true;
+		// 	barges.forEach(function(barge){
+		// 		if(me.bounds.containsRect(barge.bounds)){
+		// 			noCollision = false;
+		// 		}
+		// 	});
+		// 	if(!noCollision){
+		// 		me.x = game.world.randomX;
+		// 		me.y = game.world.randomY;
+		// 	}
+		// }
 	}
 
 	Barge.prototype = Object.create(Phaser.Sprite.prototype);
