@@ -9,6 +9,7 @@
     var sizeModifier = 6;
     var offSet = tileSize * sizeModifier
     var timerText;
+    var WORLD_SIZE = 20000;
 
     var direction =
     {
@@ -136,12 +137,12 @@
                     } else {
                         if (direction.prev == "R") {
 
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX + offSet, Tiles[prev].lY - (2*offSet), "verticalLeft", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX + offSet, Tiles[prev].lY - (2*offSet), "verticalLeft", "verticalRight"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
 
                         } else if (direction.prev == "L") {
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX+offSet, Tiles[prev].lY-(2*offSet), "verticalLeft", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - (2*offSet), Tiles[prev].lX+offSet, Tiles[prev].lY-(2*offSet), "verticalLeft", "verticalRight"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
                         } else {
@@ -270,9 +271,9 @@
 	function create() {
 		game.antialias = true;
 		game.stage.backgroundColor = "#1693A5";
-		game.world.setBounds(0, 0, 20000, 20000);
+		game.world.setBounds(0, 0, WORLD_SIZE, WORLD_SIZE);
 
-		for(var i=0; i<100; i++){
+		for(var i=0; i<WORLD_SIZE / 10; i++){
 			game.add.sprite(game.world.randomX, game.world.randomY, "wave");
 		}
         rails = game.add.group();
