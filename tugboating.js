@@ -256,7 +256,7 @@
 
 	function preload() {
 		game.load.image("boat", "assets/tug_boat.png");
-        game.load.image("barge", "assets/barge.png");
+        game.load.image("barge", "assets/OilBarge.png");
         game.load.image("verticalLeft", "assets/map/vertical_left.png");
         game.load.image("verticalRight", "assets/map/vertical_right.png");
         game.load.image("leftBottom", "assets/map/horizontal_bottom.png");
