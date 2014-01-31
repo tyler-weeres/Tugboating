@@ -4,23 +4,17 @@
 	var boat;
 	var LENGTH_OFFSET = 256;
 	var HALF_OFFSET = 128;
-	var landTypes = {
-		straight: 0,		
-		bankLeft: 1,
-		bankRight: 2,
-		sharpLeft: 3,
-		sharpRight: 4,
-		sBend: 5
-	};
 	var Rails = new Array();
 	
 
 	function Rail(asset, x, y) {
 		var me = this;
 		Phaser.Sprite.call(me, game, x, y, asset);
+		debugger;
 		me.x = Phaser.Sprite.bottomRight;
         
 	}
+
 	Rail.prototype = Object.create(Phaser.Sprite.prototype);
 	Rail.prototype.constructor = Rail;
 	
@@ -74,56 +68,7 @@
 
 	}
 	
-	//function StraightMap(x,y) {
-	//    var me = this;
-	//    me.x = x;
-	//    me.y = y;
-	//	me.vertRail = new Rail("vertical",x,y);
-	//	me.horiRail = new Rail("vertical",x-LENGTH_OFFSET,y);
-	//}
 	
-	//function LeftMap(x,y) {
-	//	var me = this;
-	//	me.vertRail = new Rail("vertical",x,y);
-	//	me.horiRail = new Rail("horizontal",x-LENGTH_OFFSET,y);
-	//}
-	
-	//function RightMap(x,y) {
-	//	var me = this;
-	//	me.vertRail = new Rail("vertical",x,y);
-	//	me.horiRail = new Rail("horizontal",x-LENGTH_OFFSET,y);
-	
-	//}		
-	function startGame(){
-		game = new Phaser.Game(800, 600, Phaser.AUTO, "container", { preload: preload, create: create, update: update });
-		game.antialias = true;
-	}
-	function preload() {
-	    game.load.image("boat", "assets/tug_boat64x128.png");
-		 game.load.image("vertical", "assets/map/vertical.png");
-		 game.load.image("left", "assets/map/left.png");
-		 game.load.image("right", "assets/map/horizontal.png");
-		 // game.load.image("bankLeft", "assets/map/bankLeft.png");
-		 // game.load.image("bankRight", "assets/map/bankRight.png");
-		 // game.load.image("sharpLeft", "assets/map/sharpLeft.png");
-		 // game.load.image("sharpRight", "assets/map/sharpRight.png");
-		 // game.load.image("sBend", "assets/map/sBend.png");
-	}
-
-	function create() {
-		boat = game.add.sprite(100, 100, "boat");
-		boat.anchor.setTo(0.5, 0.5);
-		boat.body.drag.setTo(200, 200);
-
-		createMap("*L");
-		for (var i = 0; i < Rails.length ; i++) {
-		    debugger;
-		    game.add.existing(Rails[i].railLeft);
-		    game.add.existing(Rails[i].railRight);
-		}
-		// map = new LeftMap(400,300);
-		// game.add.existing(map.vertRail);
-		// game.add.existing(map.horiRail);
 
 
 	var barge;
@@ -196,14 +141,24 @@
 	function preload() {
 		 game.load.image("boat", "assets/boat.png");
 		 game.load.image("barge", "assets/barge.png");
+		 game.load.image("vertical", "assets/map/vertical.png");
+		 game.load.image("left", "assets/map/diagonal_left.png");
+		 //game.load.image("right", "assets/map/horizontal.png");
+
 	}
 
 	function create() {
-		game.antialias = true;
-		game.stage.backgroundColor = "#1693A5";
+	    game.antialias = true;
+	    game.stage.backgroundColor = "#1693A5";
 
-		boat = new Tug();
-		barge = new Barge();
+	    boat = new Tug();
+	    barge = new Barge();
+	    createMap("*L");
+	    for (var i = 0; i < Rails.length ; i++) {
+	
+	        game.add.existing(Rails[i].railLeft);
+	        game.add.existing(Rails[i].railRight);
+	    }
 	}
 
 	function update() {
