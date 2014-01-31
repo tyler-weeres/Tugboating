@@ -121,17 +121,17 @@
             switch (railToken[i]) {
                 case "*":
 
-                    Tiles.push(new MapPiece(game.world.width/2, game.world.height, game.world.width/2 + offSet, game.world.height, "verticalLeft", "verticalLeft"));
+                    Tiles.push(new MapPiece(game.world.width / 2, game.world.height - offSet, game.world.width / 2 + offSet, game.world.height - offSet, "verticalLeft", "verticalRight"));
                                       
                     direction.cur = "S"
                     break;
                 case "S":
                     if (direction.cur == "R") {
-                        Tiles.push(new MapPiece(Tiles[prev].lX+offSet, Tiles[prev].lY , Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, "rightTop", "rightTop"));
+                        Tiles.push(new MapPiece(Tiles[prev].lX+offSet, Tiles[prev].lY , Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, "rightTop", "rightBottom"));
                         direction.prev = direction.cur;
                         direction.cur = "R";
                     } else if (direction.cur == "L") {
-                        Tiles.push(new MapPiece(Tiles[prev].rX - offSet, Tiles[prev].rY+offSet, Tiles[prev].rX - offSet, Tiles[prev].rY, "leftTop", "leftTop"));
+                        Tiles.push(new MapPiece(Tiles[prev].rX - offSet, Tiles[prev].rY+offSet, Tiles[prev].rX - offSet, Tiles[prev].rY, "leftBottom", "leftTop"));
                         direction.prev = direction.cur;
                         direction.cur = "L";
                     } else {
@@ -146,7 +146,7 @@
                             direction.prev = direction.cur;
                             direction.cur = "S";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - offSet, Tiles[prev].lX+offSet, Tiles[prev].lY-offSet, "verticalLeft", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX, Tiles[prev].lY - offSet, Tiles[prev].lX+offSet, Tiles[prev].lY-offSet, "verticalLeft", "verticalRight"));
                             direction.prev = direction.cur;
                             direction.cur = "S";
                         }
@@ -156,21 +156,21 @@
                     if (direction.cur == "R") {
 
                         if (railToken[i - 1] != "S") {
-                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2 * offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2 * offSet), Tiles[prev].lY, "leftBottom", "verticalRight"));
                             direction.prev = "L";
                             direction.cur = "S";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2* offSet), Tiles[prev].lY, "leftTop", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY + offSet, Tiles[prev].lX + (2 * offSet), Tiles[prev].lY, "leftBottom", "verticalRight"));
                             direction.prev = "L";
                             direction.cur = "S";
                         }
                     } else {
                         if (direction.prev == "R") {
-                            Tiles.push(new MapPiece(Tiles[prev].lX +offSet, Tiles[prev].lY - 2*offSet, Tiles[prev].lX, Tiles[prev].lY - 2*offSet, "verticalLeft", "rightTop"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY - 2 * offSet, Tiles[prev].lX, Tiles[prev].lY - 2 * offSet, "verticalRight", "leftBottom"));
                             direction.prev = "S";
                             direction.cur = "L";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalLeft", "rightTop"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX + offSet, Tiles[prev].lY - offSet, Tiles[prev].lX, Tiles[prev].lY - offSet, "verticalRight", "rightTop"));
                             direction.prev = direction.cur;
                             direction.cur = "L";
                         }
@@ -179,11 +179,11 @@
                 case "R":
                     if (direction.cur == "L") {
                         if (railToken[i-1] != "S") {
-                            Tiles.push(new MapPiece(Tiles[prev].lX-(2*offSet), Tiles[prev].lY+offSet, Tiles[prev].lX-(2*offSet), Tiles[prev].lY, "rightTop", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX-(2*offSet), Tiles[prev].lY+offSet, Tiles[prev].lX-(2*offSet), Tiles[prev].lY, "rightBottom", "verticalLeft"));
                             direction.prev = "R";
                             direction.cur = "S";
                         } else {
-                            Tiles.push(new MapPiece(Tiles[prev].lX - (offSet), Tiles[prev].lY - offSet + offSet, Tiles[prev].lX - (offSet), Tiles[prev].lY-offSet, "rightTop", "verticalLeft"));
+                            Tiles.push(new MapPiece(Tiles[prev].lX - (offSet), Tiles[prev].lY - offSet + offSet, Tiles[prev].lX - (offSet), Tiles[prev].lY - offSet, "rightBottom", "verticalLeft"));
                             direction.prev = "R";
                             direction.cur = "S";
                         }
@@ -250,7 +250,6 @@
                 token = token.concat(paths[choice]);
             }
         }   
-	    
 	    return token;   
 	}
 
